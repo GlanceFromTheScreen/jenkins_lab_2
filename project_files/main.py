@@ -8,6 +8,8 @@ bot = Bot(TOKEN_API)
 dp = Dispatcher(bot,
                 storage=storage)
 
+# cat
+
 #  обработчик первой команды start
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message) -> None:
