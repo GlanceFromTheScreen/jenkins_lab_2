@@ -13,7 +13,7 @@ dp = Dispatcher(bot,
 #  обработчик первой команды start
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message) -> None:
-    await message.answer('To-Do List Application!')
+    await message.answer('To-Do List Application! Yo')
 
 
 @dp.message_handler(content_types=['text'])
