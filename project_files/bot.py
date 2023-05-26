@@ -111,7 +111,7 @@ class UpdateNotificationsStateGroup(StatesGroup):
 #  обработчик первой команды start
 @dp.message_handler(commands=['start'])
 async def cmd_start(message: types.Message) -> None:
-    await message.answer('To-Do List Application 2!',
+    await message.answer('To-Do List Application 4!',
                          reply_markup=get_main_kb())
     await create_user_notifications_table(user_id=message.from_user.id)  # см. sqlite - file
 
