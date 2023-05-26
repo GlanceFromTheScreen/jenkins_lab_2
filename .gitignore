@@ -2,5 +2,8 @@
 /project_files/.idea/
 /webhooked_files/
 /webhooked_files@tmp/
+/backup@tmp/
 /project_files/__pycache__/
 /project_files/mycreds.txt
+/backup/
+/project_files/files/

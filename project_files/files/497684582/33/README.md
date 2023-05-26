@@ -23,7 +23,7 @@ pip install -r requirements.txt
 ├───report
 │   ├───lab2_opt_methods.tex # report .tex
 └───src                 # code
-    └───Test.py         # main file
+    └───main.py         # main file
 ```
 
 ### Results
