@@ -4,8 +4,28 @@ import os
 import shutil
 import aioschedule
 
-gauth = GoogleAuth()
-gauth.LocalWebserverAuth()
+
+def gogle_auth():
+    gauth = GoogleAuth()
+
+    #пробуем загрузить сохраненные данные о пользователе, чтобы не проходить ручную аутентификацию
+    gauth.LoadCredentialsFile("mycreds.txt")
+    if gauth.credentials is None:
+        # входим, если не вошли по сохраненным данным
+        gauth.GetFlow()
+        gauth.flow.params.update({'access_type': 'offline'})
+        gauth.flow.params.update({'approval_prompt': 'force'})
+
+        gauth.LocalWebserverAuth()
+
+    elif gauth.access_token_expired:
+        gauth.Refresh()
+    else:
+        gauth.Authorize()
+
+    # сохраняем пользовательские данных для последующих автоматических аутентификаций
+    gauth.SaveCredentialsFile("mycreds.txt")
+    return gauth
 
 #  вспомогательная функция
 def create_folder(folder_id, folderName, drive):
@@ -20,6 +40,7 @@ def create_folder(folder_id, folderName, drive):
 
 #  создаем папку под названием folderName в директории с folder_id
 def create_folder_in_folder(root_folder, new_folder):
+    gauth = gogle_auth()
     drive = GoogleDrive(gauth)
     folders = drive.ListFile(
         {
@@ -36,6 +57,7 @@ def is_directory_or_file_exists(root_folder, check_folder_or_file):
     :param check_folder_or_file:
     :return:
     """
+    gauth = gogle_auth()
     drive = GoogleDrive(gauth)
 
     root_folder_id = ''
@@ -54,6 +76,7 @@ def is_directory_or_file_exists(root_folder, check_folder_or_file):
 
 
 def upload_file(root_folder1, root_folder2, local_path, filename):
+    gauth = gogle_auth()
     drive = GoogleDrive(gauth)
 
     root_folder_id = ''
@@ -74,6 +97,7 @@ def upload_file(root_folder1, root_folder2, local_path, filename):
 
 
 def get_list_of_files(user_id, notify_number):
+    gauth = gogle_auth()
     drive = GoogleDrive(gauth)
     fileID = ''
     fileList = drive.ListFile({'q': f"'root' in parents and trashed=false"}).GetList()
@@ -114,6 +138,7 @@ def get_list_of_files(user_id, notify_number):
 
 
 def delete_files_from_google_disk(root_folder1, root_folder2, deliting_file):
+    gauth = gogle_auth()
     drive = GoogleDrive(gauth)
     root_folder_id = ''
     folders = drive.ListFile(
@@ -138,6 +163,7 @@ def delete_files_from_google_disk(root_folder1, root_folder2, deliting_file):
 
 def download_folder():
     """used to make backup"""
+    gauth = gogle_auth()
     drive = GoogleDrive(gauth)
     fileID = ''
     fileList = drive.ListFile({'q': f"'root' in parents and trashed=false"}).GetList()
@@ -179,6 +205,7 @@ def make_archive():
 def make_backup():
     download_folder()
     make_archive()
+    gauth = gogle_auth()
 
     drive = GoogleDrive(gauth)
     fileID = ''

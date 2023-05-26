@@ -2,6 +2,7 @@ import shutil
 import os
 from pydrive.auth import GoogleAuth
 from pydrive.drive import GoogleDrive
+from google_drive import gogle_auth
 
 gauth = GoogleAuth()
 gauth.LocalWebserverAuth()
@@ -9,6 +10,7 @@ gauth.LocalWebserverAuth()
 
 def download_folder():
     """used to make backup"""
+    gauth = gogle_auth()
     drive = GoogleDrive(gauth)
     fileID = ''
     fileList = drive.ListFile({'q': f"'root' in parents and trashed=false"}).GetList()
